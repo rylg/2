@@ -9,6 +9,7 @@ Original file is located at
 
 import math
 from statistics import mode
+import matplotlib.pyplot as plt
 
 def euclidean_distance(x1,y1,x2,y2):
     return math.sqrt(((x1-x2)**2)+((y1-y2)**2))
@@ -55,6 +56,31 @@ def knn(datapoints,query_point,labels,k):
     final_label=mode(k_labels)
 
     print("Final Label:",final_label)
+
+    # Graph
+
+    xp = [d[0] for d in datapoints]
+    yp = [d[1] for d in datapoints]
+
+    xn0 = []
+    yn0 = []
+    xn1 = []
+    yn1 = []
+
+    itr = 0
+    for dist,idx in k_distances:
+        if k_labels[itr] == 0:
+            xn0.append(xp[idx])
+            yn0.append(yp[idx])
+        else:
+            xn1.append(xp[idx])
+            yn1.append(yp[idx])
+        itr+=1
+
+    plt.scatter(xp,yp,c='blue')
+    plt.scatter(xq,yq, marker='^',c='red')
+    plt.scatter(xn0,yn0,marker='*',c='green',s=200)
+    plt.scatter(xn1,yn1,marker='*',c='yellow',s=200)
 
 def knn_distance_weighted(datapoints,query_point,labels,k):
     #Query-point coordinates
@@ -214,6 +240,8 @@ def knn_locally_weighted_average(datapoints,query_point,labels,k):
     print("Final Label:", final_label)
 
 
+
+
 #datapoints, labels, query_point
 datapoints=[
     (4,2),
@@ -238,17 +266,3 @@ knn_distance_weighted(datapoints,query_point,labels,3)
 
 print('KNN-Locally Weighted Average')
 knn_locally_weighted_average(datapoints,query_point,labels,3)
-
-
-#Output
-# KNN
-# K-nearest Neighbours with (dist,idx): [(2.0, 2), (2.0, 3), (2.8284271247461903, 5)]
-# Labels of KNNs: [1, 1, 0]
-# Final Label: 1
-# KNN-Distance Weighted
-# K-nearest Neighbours with (dist,idx): [(2.0, 2), (2.0, 3), (2.8284271247461903, 5)]
-# Labels of KNNs: [1, 1, 0]
-# K-weights: [(0.5, 2), (0.5, 3), (0.35355339059327373, 5)]
-# One Label Weight: 1.0
-# Zero Label Weight: 0.35355339059327373
-# Final Label: 1
